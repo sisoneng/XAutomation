@@ -13,12 +13,12 @@
 ##### HOW TO SETUP YOUR WALLET ADDRESSES AND SECRET KEYS:
 1. create file called .env in root directory
 2. copy paste this inside .env
-
+```
 #account1
 account1secret=111111 111111 111111 111111 111111 111111 111111 111111
 #account2
 account2secret=111111 111111 111111 111111 111111 111111 111111 111111
-
+```
 3. replace 111111 111111 111111 111111 111111 111111 111111 111111 with your secret key
 4. you can add more secrets if you like
 5. Find this line of code inside index.html 
