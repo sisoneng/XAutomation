@@ -16,18 +16,17 @@ const PUBLIC_SERVER  = "wss://xrplcluster.com/"
 const client = new xrpl.Client(PUBLIC_SERVER) // will connect to closest full node
 
 
-//const accounts = {
-//  rQBYLs42xcCviCjwREQBKq426tZ9ZCTJGV: 'ad1',
-//  rwg7DCWR6nTFbun2dFVKhmcBeYMp4yELRK: 'ad2',
-//  rBVfsVuDGR2uRf6v8USfDTWKQxsh8XWo2z: 'ad3',
-//  rhV99QN2Phws9TEeJutvJn1voaRbL2W16B: 'ad4',
-//  rJFEFAEGvbJkQLf8QKXbexv6YtkDuwZoUU: 'ad5',
-//  rNNjD9FWW7R45ByExQbMtEkKBv554Utgkp: 'ad6',
-//  rhCpTKGsqjNsmdWjhPdgZtKNNW6B632ck6: 'ad7',
-//  rsY2BNSN4wXbHg5xPT5PGnS8KVZ9T622Sv: 'ad8',
-//  rN7P4bGgr5QiHijxKrHTaxWk71A7Sp7vK3: 'ad9',
-//  r4b2UmnNVdFpHMu6BWpCguvpJQD2CC4jv9: 'ad10'
-//}
+// replace with your wallet address and xumm account name
+const accounts = {
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: 'account1',
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: 'account2',
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: 'account3',
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: 'account4',
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: 'account5',
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: 'account6',
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: 'account7',
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: 'account8',
+}
 
 
 // Based on XUMM Wallet
@@ -35,6 +34,7 @@ const FEE_LOW = 0.000015
 const FEE_MEDIUM = 0.000225
 const FEE_HIGH = 0.0055
 
+// change this to change all the fee of all processes
 const current_fee = FEE_LOW
 
 const ACTIVATE_WALLET = 10000000 // 10 xrp
@@ -42,30 +42,32 @@ const RESERVED_TRUSTLINE = 2000000 // 2 xrp
 const RESERVED_OFFER = 2000000 // 2 xrp
 
 
+// replace "process.env.account1secret" with the name in your .env file
 const address_secrets = {
-  rQBYLs42xcCviCjwREQBKq426tZ9ZCTJGV: process.env.ad1secret,
-  rwg7DCWR6nTFbun2dFVKhmcBeYMp4yELRK: process.env.ad2secret,
-  rBVfsVuDGR2uRf6v8USfDTWKQxsh8XWo2z: process.env.ad3secret,
-  rhV99QN2Phws9TEeJutvJn1voaRbL2W16B: process.env.ad4secret,
-  rJFEFAEGvbJkQLf8QKXbexv6YtkDuwZoUU: process.env.ad5secret,
-  rNNjD9FWW7R45ByExQbMtEkKBv554Utgkp: process.env.ad6secret,
-  rhCpTKGsqjNsmdWjhPdgZtKNNW6B632ck6: process.env.ad7secret,
-  rsY2BNSN4wXbHg5xPT5PGnS8KVZ9T622Sv: process.env.ad8secret,
-  rN7P4bGgr5QiHijxKrHTaxWk71A7Sp7vK3: process.env.ad9secret,
-  r4b2UmnNVdFpHMu6BWpCguvpJQD2CC4jv9: process.env.ad10secret
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: process.env.account1secret,
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: process.env.account2secret,
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: process.env.account3secret,
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: process.env.account4secret,
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: process.env.account5secret,
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: process.env.account6secret,
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: process.env.account7secret,
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: process.env.account8secret,
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: process.env.account9secret,
+  rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: process.env.account10secret
 }
 
+// replace "process.env.account1secret" with the name in your .env file
 const secrets = [
-process.env.ad1secret,
-process.env.ad2secret,
-process.env.ad3secret,
-process.env.ad4secret,
-process.env.ad5secret,
-process.env.ad6secret,
-process.env.ad7secret,
-process.env.ad8secret,
-process.env.ad9secret,
-process.env.ad10secret
+process.env.account1secret,
+process.env.account2secret,
+process.env.account3secret,
+process.env.account4secret,
+process.env.account5secret,
+process.env.account6secret,
+process.env.account7secret,
+process.env.account8secret,
+process.env.account9secret,
+process.env.account10secret
 ]
 
 app.listen(port);
