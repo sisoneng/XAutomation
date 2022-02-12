@@ -1,0 +1,21 @@
+{
+  "name": "web-xrpl-tools",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "soneng",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "bulma": "^0.9.3",
+    "dotenv": "^14.3.2",
+    "express": "^4.17.2",
+    "nodemon": "^2.0.15",
+    "xrpl": "^2.1.1",
+    "xrpl-secret-numbers": "^0.3.3"
+  }
+}

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>XAutomation</title>
+    <link rel='shortcut icon' type='image/x-icon' href="/images/rocket.png">
+    <link rel="stylesheet" type="text/css" href="/css/bulma-rtl.min.css">
+  </head>
+  <body class="has-background-dark">
+
+  <div class="columns is-centered has-background-dark">
+    <section class="section">
+      <div class="container ml-0">
+        <figure class="image is-3by2">
+          <img src="/images/xautomation.svg">
+        </figure>
+        <h1 class="title has-text-white-ter">
+          Your shortcut to the moon! &#128640;&#128640;&#128640;&#128640;&#128640;
+        </h1>
+      </div>
+    </section>
+  </div>
+
+  <div class="columns is-centered">
+    <div class="column is-three-fifths">
+      <section class="section box has-background-white-ter">
+        <div class="field">
+          <div class="columns">
+            <div class="column">
+              <div class="control">
+                  <button class="button is-primary is-fullwidth has-text-weight-bold is-size-5 mt-2 is-focused view-tl-modal-trigger" id="view-accts-info" data-target="view-accts-modal">View Accounts</button>
+              </div>
+            </div>
+          </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="columns is-centered">
+    <div class="column is-three-fifths">
+      <section class="section box has-background-white-ter">
+        <div class="field">
+          <label class="label has-text-grey-dark">Currency (Standard / Non-Standard)</label>
+          
+        <div class="control mb-3" onkeyup="validateTLCheckerInput()">
+          <input class="input has-text-info"  type="text" placeholder="534F4C4F00000000000000000000000000000000" required id="tl-checker-currency">
+        </div>
+
+          <div class="columns">
+            <div class="column">
+              <div class="control">
+                  <button class="button is-primary is-fullwidth has-text-weight-bold is-size-5 mt-2 is-focused tl-checker-modal-trigger" id="tl-checker-btn" data-target="tl-checker-modal" disabled>Trustline Checker</button>
+              </div>
+            </div>
+          </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="columns is-centered">
+    <div class="column is-three-fifths">
+    <section class="section box has-background-white-ter">
+      <div class="field ">
+        <h1 class="title is-size-4 has-text-info">
+          Trustline Information
+        </h1>
+      
+        <label class="label has-text-grey-dark">Token Issuer</label>
+        <div class="control mb-3">
+          <input class="input has-text-info" onkeyup="validateSetTLInput()" type="text" placeholder="rBPtuMc4HBR1SuZyZv8hs7WBVxLBYrzxbY" required id="token-issuer">
+        </div>
+      
+        <label class="label has-text-grey-dark">Currency</label>
+        <div class="control mb-3 has-text-info" onkeyup="validateSetTLInput()">
+          <input class="input"  type="text" placeholder="PASA" required id="currency">
+        </div>
+      
+        <label class="label has-text-grey-dark">Limit Amount</label>
+        <div class="control mb-3 has-text-info" onkeyup="validateSetTLInput()">
+          <input class="input" type="number"  placeholder="16 digits max. No decimal. Put 0 if delete trustline" required id="limit">
+        </div>
+      </div>  
+    
+      <div class="control">
+        <button class="button mt-6 is-primary is-fullwidth has-text-weight-bold is-size-5 set-tl-modal-trigger" data-target="set-tl-modal" id="add-accts-btn" disabled>Add Accounts</button>
+      </div>  
+    </section>
+    </div>
+  </div>
+
+  <div class="columns is-centered">
+    <div class="column is-three-fifths">
+      <section class="section box has-background-white-ter">
+        <div class="field">
+          <h1 class="title is-size-4 has-text-info">
+            Token Aggregator
+          </h1>
+          <div class="columns">
+            <div class="column">
+              <label class="label">Receiver Address</label>
+              <div class="control mb-3" onkeyup="validateTokenAggregatorInput()">
+                <input class="input" type="text"  placeholder="rBPtuMc4HBR1SuZyZv8hs7WBVxLBYrzxbY" required id="receiver-nonxrp">
+              </div>
+              <label class="label">Issuer</label>
+              <div class="control mb-3" onkeyup="validateTokenAggregatorInput()">
+                <input class="input" type="text" placeholder="rBPtuMc4HBR1SuZyZv8hs7WBVxLBYrzxbY" required id="receiver-nonxrp-issuer">
+              </div>
+              <label class="label">Currency</label>
+              <div class="control mb-3" onkeyup="validateTokenAggregatorInput()">
+                <input class="input" type="text" placeholder="PASA" required id="receiver-nonxrp-currency">
+              </div>
+              <label class="label">Amount</label>
+              <div class="control mb-3" onkeyup="validateTokenAggregatorInput()">
+                <input class="input" type="text" placeholder="10" required id="receiver-nonxrp-amount">
+              </div>
+              <div class="control">
+                  <button class="button is-primary is-fullwidth has-text-weight-bold is-size-5 mt-6 is-focused set-tl-modal-trigger" id="aggregator-add-sender" data-target="set-tl-modal" disabled>Add Sender</button>
+                </div>
+            </div>
+          </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="columns is-centered">
+    <div class="column is-three-fifths">
+      <section class="section box has-background-white-ter">
+        <div class="field">
+          <h1 class="title is-size-4 has-text-info">
+            XRP Scatter
+          </h1>
+          <div class="columns">
+            <div class="column">
+              <label class="label">Sender Address</label>
+              <div class="control mb-3" onkeyup="validateXRPScatterInput()">
+                <input class="input" type="text" placeholder="rBPtuMc4HBR1SuZyZv8hs7WBVxLBYrzxbY" id="sender-xrp">
+              </div>
+              <label class="label">Amount (XRP)</label>
+              <div class="control mb-3" onkeyup="validateXRPScatterInput()">
+                <input class="input" type="text" placeholder="Enter amount in XRP" id="sender-xrp-amount">
+              </div>
+              <div class="control">
+                  <button class="button is-primary mt-6 is-fullwidth has-text-weight-bold is-size-5 is-focused set-tl-modal-trigger" id="sender-xrp-btn" data-target="set-tl-modal" disabled>Add Recipients</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="content has-text-centered">
+      <p>
+        <strong>XAutomation</strong> by <a class="is-primary">soneng</a>. The source code is licensed
+        <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
+        is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+      </p>
+      <div class="block mt-0">
+        <a href="https://xrpl.services/tokens" target="_blank">Xumm community tokens</a>
+      </div>
+      <div class="block mt-0">
+        <a href="https://xrpl.org/index.html" target="_blank">XRP Ledger Official Page</a>
+      </div>
+      <div class="block mt-0">
+        <a href="https://github.com/sisoneng" target="_blank">Follow me on Github =)</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="set-tl-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Select Accounts</p>
+        <button class="delete" id="set-tl-modal-close" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <div class="field is-grouped">
+          <label class="checkbox">
+          <div class="control is-size-6 mb-4">
+            <input type="checkbox" class="accts" onClick="accountToggle(this)" name="selectalltl" value="select-all" id="select-all-btn">
+            Select All
+          </label>
+          </div> 
+
+          <label class="checkbox">
+          <div class="control is-size-6 mb-4">
+            <input type="checkbox" class="accts" name="accts" value="rQBYLs42xcCviCjwREQBKq426tZ9ZCTJGV">
+            ad1 rQBYLs42xcCviCjwREQBKq426tZ9ZCTJGV
+          </label>
+          </div>
+          
+
+          <label class="checkbox">
+            <div class="control  is-size-6 mb-4">
+              <input type="checkbox" class="accts" name="accts" value="rwg7DCWR6nTFbun2dFVKhmcBeYMp4yELRK">
+              ad2 rwg7DCWR6nTFbun2dFVKhmcBeYMp4yELRK
+          </label>
+          </div>
+
+          <label class="checkbox">
+          <div class="control  is-size-6 mb-4">
+            <input type="checkbox" class="accts" name="accts" value="rBVfsVuDGR2uRf6v8USfDTWKQxsh8XWo2z">
+            ad3 rBVfsVuDGR2uRf6v8USfDTWKQxsh8XWo2z
+          </label>
+          </div>
+
+          <label class="checkbox">
+          <div class="control  is-size-6 mb-4">
+            <input type="checkbox" class="accts" name="accts" value="rhV99QN2Phws9TEeJutvJn1voaRbL2W16B">
+            ad4 rhV99QN2Phws9TEeJutvJn1voaRbL2W16B
+          </label>
+          </div>
+
+          <label class="checkbox">
+          <div class="control  is-size-6 mb-4">
+            <input type="checkbox" class="accts" name="accts" value="rJFEFAEGvbJkQLf8QKXbexv6YtkDuwZoUU">
+            ad5 rJFEFAEGvbJkQLf8QKXbexv6YtkDuwZoUU
+          </label>
+          </div>
+
+          <label class="checkbox">
+          <div class="control  is-size-6 mb-4">
+            <input type="checkbox" class="accts" name="accts" value="rNNjD9FWW7R45ByExQbMtEkKBv554Utgkp">
+            ad6 rNNjD9FWW7R45ByExQbMtEkKBv554Utgkp
+          </label>
+          </div>
+
+          <label class="checkbox">
+          <div class="control is-size-6 mb-4">
+            <input type="checkbox" class="accts" name="accts" value="rhCpTKGsqjNsmdWjhPdgZtKNNW6B632ck6">
+            ad7 rhCpTKGsqjNsmdWjhPdgZtKNNW6B632ck6
+          </label>
+          </div>
+
+          <label class="checkbox">
+          <div class="control is-size-6 mb-4">
+            <input type="checkbox" class="accts" name="accts" value="rsY2BNSN4wXbHg5xPT5PGnS8KVZ9T622Sv">
+            ad8 rsY2BNSN4wXbHg5xPT5PGnS8KVZ9T622Sv
+          </label>
+          </div>
+
+          <label class="checkbox">
+          <div class="control is-size-6 mb-4">
+            <input type="checkbox" class="accts" name="accts" value="rN7P4bGgr5QiHijxKrHTaxWk71A7Sp7vK3">
+            ad9 rN7P4bGgr5QiHijxKrHTaxWk71A7Sp7vK3
+          </label>
+          </div>
+
+          <label class="checkbox">
+          <div class="control is-size-6 mb-4">
+            <input type="checkbox" class="accts" name="accts" value="r4b2UmnNVdFpHMu6BWpCguvpJQD2CC4jv9">
+            ad10 r4b2UmnNVdFpHMu6BWpCguvpJQD2CC4jv9
+          </label>
+          </div>
+          
+        </div>
+      </section>
+
+
+      <footer class="modal-card-foot">
+        <div class="control">
+          <button class="button is-primary mr-3 is-focused" id="set-tl-btn">Set Trustline</button>
+        </div>
+        <div class="control">
+          <button class="button is-danger mr-3 is-focused" id="del-tl-btn">Delete Trustline</button>
+        </div>
+        <div class="control">
+          <button class="button is-info mr-3 is-focused" id="send-xrp-btn">Send XRP</button>
+        </div>
+        <div class="control">
+          <button class="button is-warning mr-3 is-focused" id="send-nonxrp-btn">Send Issued Token</button>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <div class="modal" id="view-accts-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title" id="view-accts-modal-header"></p>
+        <button class="delete" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body" id="view-accts-modal-content">
+      </section>
+    </div>
+  </div>
+
+  <div class="modal" id="tl-checker-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title" id="tl-checker-modal-header"></p>
+        <button class="delete" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body" id="tl-checker-modal-content">
+          
+      </section>
+    </div>
+  </div>
+
+  </body>
+  <script type="text/javascript" src="/js/index.js"></script>
+</html>
