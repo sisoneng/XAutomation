@@ -7,7 +7,6 @@ const xrpl = require('xrpl')
 const {Account} = require('xrpl-secret-numbers')
 require('dotenv').config()
 
-
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules/bulma')));
 app.use(bodyParser.json());
@@ -17,18 +16,18 @@ const PUBLIC_SERVER  = "wss://xrplcluster.com/"
 const client = new xrpl.Client(PUBLIC_SERVER) // will connect to closest full node
 
 
-const accounts = {
-  rQBYLs42xcCviCjwREQBKq426tZ9ZCTJGV: 'ad1',
-  rwg7DCWR6nTFbun2dFVKhmcBeYMp4yELRK: 'ad2',
-  rBVfsVuDGR2uRf6v8USfDTWKQxsh8XWo2z: 'ad3',
-  rhV99QN2Phws9TEeJutvJn1voaRbL2W16B: 'ad4',
-  rJFEFAEGvbJkQLf8QKXbexv6YtkDuwZoUU: 'ad5',
-  rNNjD9FWW7R45ByExQbMtEkKBv554Utgkp: 'ad6',
-  rhCpTKGsqjNsmdWjhPdgZtKNNW6B632ck6: 'ad7',
-  rsY2BNSN4wXbHg5xPT5PGnS8KVZ9T622Sv: 'ad8',
-  rN7P4bGgr5QiHijxKrHTaxWk71A7Sp7vK3: 'ad9',
-  r4b2UmnNVdFpHMu6BWpCguvpJQD2CC4jv9: 'ad10'
-}
+//const accounts = {
+//  rQBYLs42xcCviCjwREQBKq426tZ9ZCTJGV: 'ad1',
+//  rwg7DCWR6nTFbun2dFVKhmcBeYMp4yELRK: 'ad2',
+//  rBVfsVuDGR2uRf6v8USfDTWKQxsh8XWo2z: 'ad3',
+//  rhV99QN2Phws9TEeJutvJn1voaRbL2W16B: 'ad4',
+//  rJFEFAEGvbJkQLf8QKXbexv6YtkDuwZoUU: 'ad5',
+//  rNNjD9FWW7R45ByExQbMtEkKBv554Utgkp: 'ad6',
+//  rhCpTKGsqjNsmdWjhPdgZtKNNW6B632ck6: 'ad7',
+//  rsY2BNSN4wXbHg5xPT5PGnS8KVZ9T622Sv: 'ad8',
+//  rN7P4bGgr5QiHijxKrHTaxWk71A7Sp7vK3: 'ad9',
+//  r4b2UmnNVdFpHMu6BWpCguvpJQD2CC4jv9: 'ad10'
+//}
 
 
 // Based on XUMM Wallet
