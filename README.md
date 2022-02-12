@@ -7,8 +7,9 @@
 ##### REQUIREMENTS:
 1. Modern Browsers
 2. Node JS (download here https://nodejs.org/en/)
-3. Activated Wallet
-4. Internet Connection
+3. Install nodemon. `npm install -g nodemon`
+4. Activated Wallet
+5. Internet Connection
 
 ##### HOW TO SETUP YOUR WALLET ADDRESSES AND SECRET KEYS:
 1. create file called .env in root directory
