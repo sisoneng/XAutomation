@@ -286,7 +286,7 @@ async function runSetTrustlineProcess(_wallet_addresses, _token_issuer, _currenc
 
       try {
         lines.forEach(line => {
-          if(line.account == _token_issuer){
+          if(line.account == _token_issuer && line.currency == _currency){
             throw ('Trustline is already set on address ' + wallet.address + ' (' + accounts[wallet.address] + ').')
           }
         })
