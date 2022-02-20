@@ -45,20 +45,22 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-const setTLBtn = document.getElementById("set-tl-btn");
-const delTLBtn = document.getElementById("del-tl-btn");
-const sendXRPBtn = document.getElementById("send-xrp-btn");
-const sendNonXRPBtn = document.getElementById("send-nonxrp-btn");
-const viewAcctsInfo = document.getElementById("view-accts-info");
-const tlCheckerBtn = document.getElementById("tl-checker-btn");
+const viewAcctsInfo = document.getElementById("view-accts-info")
+const tlCheckerBtn = document.getElementById("tl-checker-btn")
+const setTLBtn = document.getElementById("set-tl-btn")
+const delTLBtn = document.getElementById("del-tl-btn")
+const sendNonXRPBtn = document.getElementById("send-nonxrp-btn")
+const sendXRPBtn = document.getElementById("send-xrp-btn")
+const sendXRPBtn2 = document.getElementById("send-xrp-btn2")
 const body = document.querySelector("body");
 
-setTLBtn.addEventListener("click", runProcess);
-delTLBtn.addEventListener("click", runProcess);
-sendXRPBtn.addEventListener("click", runProcess);
-sendNonXRPBtn.addEventListener("click", runProcess);
-viewAcctsInfo.addEventListener("click", viewInfo);
+viewAcctsInfo.addEventListener("click", viewInfo)
 tlCheckerBtn.addEventListener("click", trustlineChecker)
+setTLBtn.addEventListener("click", runProcess)
+delTLBtn.addEventListener("click", runProcess)
+sendNonXRPBtn.addEventListener("click", runProcess)
+sendXRPBtn.addEventListener("click", runProcess)
+sendXRPBtn2.addEventListener("click", sendXRP2)
 
 async function runProcess(e){
   const target_name = e.target.id
@@ -102,9 +104,9 @@ async function setTrustline(accounts){
   accounts.forEach(acct => acctlist.push(acct.value))
 
   const trustline = {
-    token_issuer: token_issuer,
-    currency: currency,
-    limit: limit
+    token_issuer: token_issuer.trim(),
+    currency: currency.trim(),
+    limit: limit.trim()
   }
 
   const data = JSON.stringify({
@@ -126,12 +128,12 @@ async function setTrustline(accounts){
   if(response.ok){
     response = await response.json()
 
-    alert(`[STATUS 200] Processing done. Pls check server log for more information.`)
+    alert(`Request done. Pls check server log for more information.`)
     clearAccounts()
 
   }else{
     clearAccounts()
-    alert(`[ERROR] Internal Server Error. No transaction was submitted. Please check server log.`)
+    alert(`${ERR_MSG}. No transaction was submitted. Please check server log for more information.`)
     document.getElementById('set-tl-modal-close').click()
   }
 
@@ -149,9 +151,9 @@ async function deleteTrustline(accounts){
   accounts.forEach(acct => acctlist.push(acct.value))
   
   const trustline = {
-    token_issuer: token_issuer,
-    currency: currency,
-    limit: limit
+    token_issuer: token_issuer.trim(),
+    currency: currency.trim(),
+    limit: limit.trim()
   }
 
   const data = JSON.stringify({
@@ -172,12 +174,11 @@ async function deleteTrustline(accounts){
 
   if(response.ok){  
     response = await response.json()
-    alert(`[STATUS 200] Processing done. Pls check server log for more information.`)
+    alert(`Request done. Pls check server log for more information.`)
     clearAccounts()
-    //clearTrustlineInfo();
   }else{
     clearAccounts()
-    alert(`[ERROR] Internal Server Error. No transaction was submitted. Please check server log.`)
+    alert(`${ERR_MSG}. No transaction was submitted. Please check server log for more information.`)
     document.getElementById('set-tl-modal-close').click()
   }
 
@@ -195,7 +196,7 @@ async function sendXRP(accounts){
   accounts.forEach(acct => acctlist.push(acct.value))
 
   const data = JSON.stringify({
-    sender: sender,
+    sender: sender.trim(),
     xrp_amount: xrp_amount,
     acctlist: acctlist
   })
@@ -214,11 +215,11 @@ async function sendXRP(accounts){
   if(response.ok){  
     response = await response.json()
     clearAccounts();
-    alert(`[STATUS 200] Processing done. Pls check server log for more information.`)
+    alert(`Request done. Pls check server log for more information.`)
     //clearXRPScatterInfo();
   }else{
     clearAccounts()
-    alert(`[ERROR] Internal Server Error. No transaction was submitted. Please check server log.`)
+    alert(`${ERR_MSG}. No transaction was submitted. Please check server log for more information.`)
     document.getElementById('set-tl-modal-close').click()
   }
 
@@ -239,9 +240,9 @@ async function sendNonXRP(accounts){
   preRequest(DESCRIPTION)
 
   const data = JSON.stringify({
-    receiver: receiver,
-    issuer: token_issuer,
-    currency: currency,
+    receiver: receiver.trim(),
+    issuer: token_issuer.trim(),
+    currency: currency.trim(),
     nonxrp_amount: nonxrp_amount,
     acctlist: acctlist
   })
@@ -258,11 +259,10 @@ async function sendNonXRP(accounts){
   if(response.ok){  
     response = await response.json();
     clearAccounts();
-    alert(`[STATUS 200] Processing done. Pls check server log for more information.`)
-    //clearTokenAggregatorInfo();
+    alert(`Request done. Pls check server log for more information.`)
   }else{
     clearAccounts()
-    alert(`[ERROR] Internal Server Error. No transaction was submitted. Please check server log.`)
+    alert(`${ERR_MSG}. No transaction was submitted. Please check server log for more information.`)
     document.getElementById('set-tl-modal-close').click()
   }
 
@@ -277,7 +277,6 @@ async function viewInfo(){
   document.getElementById("view-accts-modal-header").innerText = "Please Wait..."
   document.body.style.cursor = "wait"
   
-
   let response = await fetch('/viewinfo')
   
   if(response.ok){
@@ -374,7 +373,7 @@ async function trustlineChecker(){
   const trustline = document.getElementById("tl-checker-currency").value
 
   data = JSON.stringify({
-    trustline: trustline
+    trustline: trustline.trim()
   })
 
   let response = await fetch('/tlchecker', {
@@ -418,6 +417,41 @@ function createTrustlineAccountsElement(wallet_address, account_name){
   parent.append(divElement)
 
   return;
+}
+
+async function sendXRP2(){
+  if(confirm('Are you sure?')){
+    document.body.style.pointerEvents = 'none'
+    document.body.style.cursor = 'wait'
+    const sender = document.getElementById("sender-xrp2").value
+    const amount = document.getElementById("sender-xrp-amount2").value
+
+    const data = JSON.stringify({
+      sender: sender.trim(),
+      amount: amount
+    })
+
+    alert(`Starting. Pls check server log for more information.`)
+    let response = await fetch('/sendxrp2', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: data
+    })
+
+    if(response.ok){
+      response = await response.json()
+      alert(`Request done. Pls check server log for more information.`)
+    }else{
+      alert(`${ERR_MSG}. No transaction was submitted. Please check server log for more information.`)
+    }
+    
+    document.body.style.pointerEvents = 'auto'
+    document.body.style.cursor = "default"
+  }
+  return
 }
 
 
@@ -483,7 +517,7 @@ function postRequest(request_name){
 function validateTLCheckerInput(){
   const currency = document.getElementById("tl-checker-currency").value
   
-  document.getElementById("tl-checker-btn").disabled = currency != "" ? false : true
+  document.getElementById("tl-checker-btn").disabled = currency.trim() != "" ? false : true
 
   return
 }
@@ -494,7 +528,7 @@ function validateSetTLInput(){
   const currency = document.getElementById("currency").value
   const limit = document.getElementById("limit").value
   
-  if(token_issuer != "" && currency != "" && limit != ""){
+  if(token_issuer.trim() != "" && currency.trim() != "" && limit.trim() != ""){
     document.getElementById("add-accts-btn").disabled = false
   }else{
     document.getElementById("add-accts-btn").disabled = true
@@ -510,24 +544,37 @@ function validateTokenAggregatorInput(){
   const currency = document.getElementById("receiver-nonxrp-currency").value
   const amount = document.getElementById("receiver-nonxrp-amount").value
   
-  if(receiver_address != "" && token_issuer != "" && currency != "" && amount != ""){
+  if(receiver_address.trim() != "" && token_issuer.trim() != "" && currency.trim() != "" && amount.trim() != ""){
     document.getElementById("aggregator-add-sender").disabled = false
   }else{
     document.getElementById("aggregator-add-sender").disabled = true
   }
 
-  return;
+  return
 }
 
 
-function validateXRPScatterInput(){
-  const token_issuer = document.getElementById("sender-xrp").value
+function validateXRPScatterInput(e){
+  const sender = document.getElementById("sender-xrp").value
   const amount = document.getElementById("sender-xrp-amount").value
   
-  if(token_issuer != "" && amount != ""){
-    document.getElementById("sender-xrp-btn").disabled = false
+  if(sender.trim() != "" && amount.trim() != ""){
+    document.getElementById("send-xrp-add-recipients").disabled = false
   }else{
-    document.getElementById("sender-xrp-btn").disabled = true
+    document.getElementById("send-xrp-add-recipients").disabled = true
+  }
+
+  return;
+}
+
+function validateXRPScatterInput2(){
+  const sender = document.getElementById("sender-xrp2").value
+  const amount = document.getElementById("sender-xrp-amount2").value
+  
+  if(sender.trim() != "" && amount.trim() != ""){
+    document.getElementById("send-xrp-btn2").disabled = false
+  }else{
+    document.getElementById("send-xrp-btn2").disabled = true
   }
 
   return;
@@ -580,14 +627,12 @@ function clearTrustlineInfo(){
   return
 }
 
-
 function clearXRPScatterInfo(){
   document.getElementById("sender-xrp").value = ''
   document.getElementById("sender-xrp-amount").value = ''
 
   return
 }
-
 
 function clearTokenAggregatorInfo(){
   document.getElementById("receiver-nonxrp").value = ''

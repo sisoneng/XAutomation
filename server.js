@@ -7,16 +7,16 @@ const xrpl = require('xrpl')
 const {Account} = require('xrpl-secret-numbers')
 require('dotenv').config()
 
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules/bulma')));
 app.use(bodyParser.json());
 
 
 const PUBLIC_SERVER  = "wss://xrplcluster.com/"
-const client = new xrpl.Client(PUBLIC_SERVER) // will connect to closest full node
+const client = new xrpl.Client(PUBLIC_SERVER) // connect to closest full node
 
 
-// replace with your wallet address and xumm account name
 const accounts = {
   rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: 'account1',
   rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: 'account2',
@@ -34,7 +34,7 @@ const FEE_LOW = 0.000015
 const FEE_MEDIUM = 0.000225
 const FEE_HIGH = 0.0055
 
-// change this to change all the fee of all processes
+// change to FEE_LOW / FEE_MEDIUM / FEE_HIGH to change fee
 const current_fee = FEE_LOW
 
 const ACTIVATE_WALLET = 10000000 // 10 xrp
@@ -42,7 +42,6 @@ const RESERVED_TRUSTLINE = 2000000 // 2 xrp
 const RESERVED_OFFER = 2000000 // 2 xrp
 
 
-// replace "process.env.account1secret" with the name in your .env file
 const address_secrets = {
   rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: process.env.account1secret,
   rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: process.env.account2secret,
@@ -56,7 +55,6 @@ const address_secrets = {
   rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz: process.env.account10secret
 }
 
-// replace "process.env.account1secret" with the name in your .env file
 const secrets = [
 process.env.account1secret,
 process.env.account2secret,
@@ -96,19 +94,18 @@ app.post('/settl', async (req, res) => {
   console.log('--------------------------------------------------------------')
   
   
-  await runSetTrustlineProcess(wallet_addresses, token_issuer.trim(), currency.trim(), limit.trim())
+  await runSetTrustlineProcess(wallet_addresses, token_issuer, currency, limit)
   .then(msg => {
     console.log(msg);
     res.status(200).json({status: 'ok'})
   })
   .catch(reject => {
-    //console.log(reject)
+    console.log(reject)
     res.status(404).json({status: 'Bad Request'})
   })
 
   client.disconnect()
 })
-
 
 
 app.get('/viewinfo', async(req, res) => {
@@ -147,7 +144,7 @@ app.post('/tlchecker', async (req, res) => {
   const trustline = req.body.trustline
 
   
-  await runTrustlineChecker(trustline)
+  await runTrustlineChecker(trustline.trim())
   .then(trustline_accounts => {
     client.disconnect()
     res.status(200).json({status:"ok", trustline_accounts: trustline_accounts})
@@ -178,7 +175,8 @@ app.post('/deltl', async (req, res) => {
   console.log(`Limit:  ${limit}`);
   console.log('--------------------------------------------------------------')
 
-  await runDeleteTrustlineProcess(wallet_addresses, token_issuer.trim(), currency.trim(), 0)
+  // LIMIT SUPPLY = 0
+  await runDeleteTrustlineProcess(wallet_addresses, token_issuer, currency, 0)
   .then(msg => {
     client.disconnect()
     console.log(msg);
@@ -204,14 +202,14 @@ app.post('/sendxrp', async (req, res) => {
     client.disconnect()
   })  
 
-  const sender = req.body.sender;
-  const recipient_addresses = req.body.acctlist;
-  const xrp_amount = req.body.xrp_amount;
-  console.log('Sender: ' + sender);
-  console.log('Amount: ' + xrp_amount);
+  const sender = req.body.sender
+  const recipient_addresses = req.body.acctlist
+  const xrp_amount = req.body.xrp_amount
+  console.log('Sender: ' + sender)
+  console.log('Amount: ' + xrp_amount)
   console.log('--------------------------------------------------------------')
 
-  await runSendXRPProcess(sender.trim(), xrp_amount.trim(), recipient_addresses)
+  await runSendXRPProcess(sender.trim(), xrp_amount, recipient_addresses)
   .then(msg => {
     console.log(msg);
     res.status(200).json({status:"ok"})
@@ -236,20 +234,20 @@ app.post('/sendnonxrp', async(req, res) => {
     client.disconnect()
   })  
 
-  const receiver_address = req.body.receiver;
-  const token_issuer = req.body.issuer;
-  const currency = req.body.currency;
-  const nonxrp_amount = req.body.nonxrp_amount;
-  const sender_addresses = req.body.acctlist;
+  const receiver_address = req.body.receiver
+  const token_issuer = req.body.issuer
+  const currency = req.body.currency
+  const nonxrp_amount = req.body.nonxrp_amount
+  const sender_addresses = req.body.acctlist
   
-  console.log('Receiver: ' + receiver_address);
-  console.log('issuer: ' + token_issuer);
-  console.log('currency: ' + currency);
-  console.log('nonxrp_amount: ' + nonxrp_amount);
-  console.log('sender_address: ' + sender_addresses);
+  console.log(`Receiver: ${receiver_address}`)
+  console.log(`Token Issuer: ${token_issuer}`)
+  console.log(`Currency: ${currency}`)
+  console.log(`Send Amount: ${nonxrp_amount}`)
+  console.log(`Sender: ${sender_addresses}`)
   console.log('--------------------------------------------------------------')   
 
-  await runSendNonXRPProcess(receiver_address.trim(), token_issuer.trim(), currency.trim(), nonxrp_amount.trim(), sender_addresses)
+  await runSendNonXRPProcess(receiver_address, token_issuer, currency, nonxrp_amount, sender_addresses)
   .then(msg=> {
     console.log(msg);
     client.disconnect()
@@ -264,6 +262,33 @@ app.post('/sendnonxrp', async(req, res) => {
   client.disconnect()
 })
 
+app.post('/sendxrp2', async(req, res) => {
+  await client.connect().then(() => {
+    console.log('-----------------------XRP SCATTER II------------------------')
+    console.log('You are now connected to ' + PUBLIC_SERVER)
+    console.log('--------------------------------------------------------------')
+  })
+  .catch(reject => {
+    console.log("Failed to connect to " + PUBLIC_SERVER + "\n" + reject)
+    client.disconnect()
+  })  
+
+  const sender = req.body.sender
+  const amount = req.body.amount
+
+  await runSendXRP2PRocess(sender, amount)
+  .then(msg => {
+    console.log(msg);
+    client.disconnect()
+    res.status(200).json({status:"ok"})
+  })
+  .catch(reject => {
+    console.log(reject)
+    client.disconnect()
+    res.status(400).json({status: "Bad Request"})
+  })
+})
+
 async function runSetTrustlineProcess(_wallet_addresses, _token_issuer, _currency, _limit){
   let result
   
@@ -272,8 +297,8 @@ async function runSetTrustlineProcess(_wallet_addresses, _token_issuer, _currenc
   }else {
     result = await Promise.allSettled(_wallet_addresses.map(async (wallet_address) => {
       let tl_count, offer_count, avail_bal = 0
-      const account = new Account(address_secrets[wallet_address]) // derive account from secret
-      const wallet = xrpl.Wallet.fromSeed(account.getFamilySeed()) // derive address from account
+      const account = new Account(address_secrets[wallet_address]) 
+      const wallet = xrpl.Wallet.fromSeed(account.getFamilySeed()) 
       
       const response1 = await client.request({
         command: 'account_lines',
@@ -310,20 +335,18 @@ async function runSetTrustlineProcess(_wallet_addresses, _token_issuer, _currenc
         avail_bal = total_balance - ACTIVATE_WALLET - 
         trustline_reserved_balance - offer_reserved_balance
 
-
         if(avail_bal < (RESERVED_TRUSTLINE + current_fee)){
           throw('Insufficient XRP to set trustline. Your available balance is ' + xrpl.dropsToXrp(avail_bal) + ' XRP for ' + wallet.address + ' (' + accounts[wallet.address] + ').')
         }
 
-        // FEE_LOW default
         const prepared_tx = await client.autofill({
           TransactionType: 'TrustSet',
           Account: wallet.address,
           Fee: xrpl.xrpToDrops(current_fee.toString().trim()),
           LimitAmount: {
-            currency: _currency.trim(), 
-            issuer: _token_issuer.trim(), 
-            value: _limit.trim()
+            currency: _currency, 
+            issuer: _token_issuer, 
+            value: _limit
           },
           Flags: {
             tfSetNoRipple: true // 131072
@@ -343,9 +366,7 @@ async function runSetTrustlineProcess(_wallet_addresses, _token_issuer, _currenc
         // display result
         printLedgerResponseTrustRemoval(result)
       }catch(error){
-        // uncomment to see full error log.
-        // console.log(error); 
-        console.log(`Bad Request. ${error}`);
+        console.log(`${error}`);
       } 
     })
     )
@@ -405,9 +426,7 @@ async function runDeleteTrustlineProcess(_wallet_addresses, _token_issuer, _curr
         printLedgerResponseTrustRemoval(result)
 
       }catch(error){
-        // uncomment to see full error log.
-        // console.log(error);
-        console.log(`Bad Request. ${error}`);
+        console.log(`${error}`);
       }
     })
   )
@@ -423,7 +442,6 @@ async function runSendXRPProcess(_sender, _xrp_amount, _recipient_addresses){
       throw `Sender can't be a recipient`
   })
 
-  // verify if sender has enough funds to send
   const line_response = await client.request({
      command: 'account_lines',
      account: sender_wallet.address,
@@ -483,16 +501,15 @@ async function runSendXRPProcess(_sender, _xrp_amount, _recipient_addresses){
 }
 
 async function runSendNonXRPProcess(_receiver_address, _token_issuer, _currency, _nonxrp_amount, _sender_addresses){
-  const receiver = new Account(address_secrets[_receiver_address])
-  const receiver_wallet = xrpl.Wallet.fromSeed(receiver.getFamilySeed()) 
-
   _sender_addresses.forEach(sender_address => {
+    console.log(`Sender address: ${sender_address}`);
     if(_receiver_address == sender_address)
-      throw `Receiver address can't be a sender address`
+      throw `Receiver address is also a sender address. Please try again.`
   })
 
-  const result = await Promise.allSettled(  
+  await Promise.allSettled(  
     _sender_addresses.map(async (sender_address) => {
+      let balance = null
       const sender = new Account(address_secrets[sender_address])
       const sender_wallet = xrpl.Wallet.fromSeed(sender.getFamilySeed())      
 
@@ -508,26 +525,27 @@ async function runSendNonXRPProcess(_receiver_address, _token_issuer, _currency,
         let isPresent = false
 
         lines.forEach(line => {
-          if(line.currency == _currency)
+          if(line.account == _token_issuer && line.currency == _currency && Number(line.balance) > 0){
             isPresent = true
-
-          else if(line.currency == _currency && Number(_nonxrp_amount) > Number(line.balance))
-            throw('Sender ' + sender_wallet.address + ' (' + accounts[sender_wallet.address] + ') ' + 'has insufficient balance.')
+            balance = line.balance
+          }
         })
 
         if(!isPresent)
-            throw('Sender ' + sender_wallet.address + ' (' + accounts[sender_wallet.address] + ') ' +  'don\'t have this trustline.') 
+            throw('Sender ' + sender_wallet.address + ' (' + accounts[sender_wallet.address] + ') ' +  'don\'t have this trustline or you have 0 balance.') 
+
+        const send_amount = _nonxrp_amount.toLowerCase() == 'max'? balance : _nonxrp_amount
 
         const prepared = await client.autofill({
-          TransactionType: "Payment",
-          Account: sender_wallet.address.trim(),
-          Destination: receiver_wallet.address.trim(),
-          Amount: {
-            issuer: _token_issuer,
-            currency: _currency,
-            value: _nonxrp_amount
-          },
-          Fee: xrpl.xrpToDrops(current_fee.toString())
+            TransactionType: "Payment",
+            Account: sender_wallet.address.trim(),
+            Destination: _receiver_address.trim(),
+            Amount: {
+              issuer: _token_issuer,
+              currency: _currency,
+              value: send_amount
+            },
+            Fee: xrpl.xrpToDrops(current_fee.toString())
         })
 
         const signed = sender_wallet.sign(prepared)
@@ -535,7 +553,7 @@ async function runSendNonXRPProcess(_receiver_address, _token_issuer, _currency,
 
         const result = await client.submitAndWait(signed.tx_blob);
 
-        printLedgerResponseSendNonXRP(result.result, receiver_wallet.address);
+        printLedgerResponseSendNonXRP(result.result, _receiver_address);
       }catch(error){
         console.log(error);
         return Promise.reject(error)
@@ -546,7 +564,7 @@ async function runSendNonXRPProcess(_receiver_address, _token_issuer, _currency,
 }
 
 async function runViewAccountInfo(client){
-  let total_avail_bal = 0, total_bal = 0, accounts_data = [];
+  let accounts_data = [];
 
   result = await Promise.allSettled(secrets.map(async (secret) => {
     let tl_count, offer_count, avail_bal = 0
@@ -604,6 +622,7 @@ async function runTrustlineChecker(_trustline){
   await Promise.allSettled(secrets.map(async (secret) => {
     const account = new Account(secret)
     const wallet = xrpl.Wallet.fromSeed(account.getFamilySeed())
+
     const line_response = await client.request({
        command: 'account_lines',
        account: wallet.address,
@@ -631,6 +650,115 @@ async function runTrustlineChecker(_trustline){
   return trustline_accounts
 }
 
+async function runSendXRP2PRocess(_sender_address, _amount){
+  let receiver_addresses = [], tl_count = 0, offer_count = 0, sender_avail_bal = 0
+  const sender = new Account(address_secrets[_sender_address])
+  const sender_wallet = xrpl.Wallet.fromSeed(sender.getFamilySeed())  
+
+  secrets.forEach(secret => {
+    const receiver = new Account(secret)
+    const receiver_wallet = xrpl.Wallet.fromSeed(receiver.getFamilySeed())
+    if(receiver_wallet.address != sender_wallet.address){
+      receiver_addresses.push(receiver_wallet.address)
+    }
+  })
+
+  console.log(`Receiver addresses: ${receiver_addresses}`);
+
+  const line_response = await client.request({
+       command: 'account_lines',
+       account: sender_wallet.address,
+       ledger_index: 'validated'
+  })
+
+  tl_count = line_response.result.lines.length
+
+  let acct_offers_response = await client.request({
+    command: "account_offers",
+    account: sender_wallet.address
+  })
+
+  offer_count = acct_offers_response.result.offers.length
+
+  let acct_info_response = await client.request({
+    command: "account_info",
+    account: sender_wallet.address,
+    strict: true,
+    ledger_index: 'current'
+  })
+
+  const total_balance = acct_info_response.result.account_data.Balance
+  const trustline_reserved_balance = tl_count * RESERVED_TRUSTLINE
+  const offer_reserved_balance = offer_count * RESERVED_OFFER
+
+  sender_avail_bal = total_balance - ACTIVATE_WALLET - 
+  trustline_reserved_balance - offer_reserved_balance
+
+  for(let i = 0; i < receiver_addresses.length; i++){
+    const account = new Account(address_secrets[receiver_addresses[i]])
+    const recipient_wallet = xrpl.Wallet.fromSeed(account.getFamilySeed())
+
+    const line_response = await client.request({
+       command: 'account_lines',
+       account: recipient_wallet.address,
+       ledger_index: 'validated'
+    })
+
+    tl_count = line_response.result.lines.length
+
+    let acct_offers_response = await client.request({
+      command: "account_offers",
+      account: recipient_wallet.address
+    })
+
+    offer_count = acct_offers_response.result.offers.length
+
+    let acct_info_response = await client.request({
+      command: "account_info",
+      account: recipient_wallet.address,
+      strict: true,
+      ledger_index: 'current'
+    })
+
+    const total_balance = acct_info_response.result.account_data.Balance
+    const trustline_reserved_balance = tl_count * RESERVED_TRUSTLINE
+    const offer_reserved_balance = offer_count * RESERVED_OFFER
+
+    recipient_avail_bal = total_balance - ACTIVATE_WALLET - 
+    trustline_reserved_balance - offer_reserved_balance
+
+    if(Number(sender_avail_bal) > (Number(xrpl.xrpToDrops(Number(_amount) + current_fee))) && 
+      Number(recipient_avail_bal) < (RESERVED_TRUSTLINE + Number(xrpl.xrpToDrops(current_fee)))){
+      
+      const prepared_tx = await client.autofill({
+         TransactionType: "Payment",
+         Account: sender_wallet.address,
+         Amount: xrpl.xrpToDrops(_amount).toString(),
+         Destination: recipient_wallet.address,
+         Fee: xrpl.xrpToDrops(current_fee.toString())
+      })
+
+      const signed = sender_wallet.sign(prepared_tx)
+
+      printSubmitAndWait(signed.hash)
+      const result = await client.submitAndWait(signed.tx_blob)
+
+      printLedgerResponseSendXRP(result, sender_wallet.address, recipient_wallet.address)
+
+      sender_avail_bal -= (Number(_amount) + current_fee)
+
+    }else if(Number(sender_avail_bal) < (Number(xrpl.xrpToDrops(Number(_amount) + current_fee)))){
+      console.log(`Sender ${sender_wallet.address} (${accounts[sender_wallet.address]}) don\'t have enough balance.`)
+      break
+    }else if(Number(recipient_avail_bal) > (RESERVED_TRUSTLINE + Number(xrpl.xrpToDrops(current_fee)))){
+      console.log(`Receiver ${recipient_wallet.address} (${accounts[recipient_wallet.address]}) has greater than 2 xrp + fee (${current_fee}).`)
+    }else{
+      throw (`Unknown Error`)
+    }  
+  }
+  return `Done`
+}
+
 function printSubmitAndWait(_tx_hash){
   console.log(_tx_hash + ' transaction was submitted. Please wait bro :)')
 
@@ -644,8 +772,7 @@ function printLedgerResponseTrustRemoval(_tx){
   console.log('Fee: ' + xrpl.dropsToXrp(_tx.result.Fee) + ' XRP')
   console.log('Transaction Hash: ' + _tx.result.hash)
   console.log('Transaction Type: ' + _tx.result.TransactionType)
-  console.log('--------------------------------------------------------------');
-  //console.log("Balance changes:", JSON.stringify(xrpl.getBalanceChanges(tx.result.meta), null, 2))
+  console.log('--------------------------------------------------------------')
 
   return
 }
@@ -671,7 +798,6 @@ function printLedgerResponseSendNonXRP(_result, _receiver_address){
   console.log('Sender: ' + _result.Account + ' (' + accounts[_result.Account] + ')')
   console.log('Destination: ' + _result.Destination + ' (' + accounts[_receiver_address] + ')')
   console.log('Amount: ' + _result.Amount.value + ' ' + _result.Amount.currency)
-  //console.log("Balance changes:", JSON.stringify(xrpl.getBalanceChanges(result.meta), null, 2))
   console.log('--------------------------------------------------------------')
 
   return
@@ -696,8 +822,8 @@ function printLedgerResponseTrustSet(_tx, _available_balance){
   console.log('Fee: ' + xrpl.dropsToXrp(_tx.result.Fee) + ' XRP')
   console.log('Transaction Hash: ' + _tx.result.hash)
   console.log('Transaction Type: ' + _tx.result.TransactionType)
-  console.log('--------------------------------------------------------------');
-  //console.log("Balance changes:", JSON.stringify(xrpl.getBalanceChanges(tx.result.meta), null, 2))
+  console.log('--------------------------------------------------------------')
   
   return
 }
+

@@ -41,7 +41,13 @@
     <div class="column is-three-fifths">
       <section class="section box has-background-white-ter">
         <div class="field">
-          <label class="label has-text-grey-dark">Currency (Standard / Non-Standard)</label>
+          <h1 class="title is-size-4 has-text-info mb-2">
+            Trustline Checker
+          </h1>
+          <h6 class="title is-size-6 has-text-info">
+            Check accounts with trustline
+          </h6>
+          <label class="label has-text-grey-dark">Currency (Non-Standard / Standard)</label>
           
         <div class="control mb-3" onkeyup="validateTLCheckerInput()">
           <input class="input has-text-info"  type="text" placeholder="4C494E5200000000000000000000000000000000 / LINR" required id="tl-checker-currency">
@@ -50,7 +56,7 @@
           <div class="columns">
             <div class="column">
               <div class="control">
-                  <button class="button is-primary is-fullwidth has-text-weight-bold is-size-5 mt-2 is-focused tl-checker-modal-trigger" id="tl-checker-btn" data-target="tl-checker-modal" disabled>Trustline Checker</button>
+                  <button class="button is-primary is-fullwidth has-text-weight-bold is-size-5 mt-2 is-focused tl-checker-modal-trigger" id="tl-checker-btn" data-target="tl-checker-modal" disabled>Check Accounts</button>
               </div>
             </div>
           </div>
@@ -62,16 +68,18 @@
     <div class="column is-three-fifths">
     <section class="section box has-background-white-ter">
       <div class="field ">
-        <h1 class="title is-size-4 has-text-info">
+        <h1 class="title is-size-4 has-text-info mb-2">
           Trustline Information
         </h1>
-      
+        <h6 class="title is-size-6 has-text-info">
+            ~ 3-5 seconds processing time
+        </h6>
         <label class="label has-text-grey-dark">Token Issuer</label>
         <div class="control mb-3">
           <input class="input has-text-info" onkeyup="validateSetTLInput()" type="text" placeholder="rBPtuMc4HBR1SuZyZv8hs7WBVxLBYrzxbY" required id="token-issuer">
         </div>
       
-        <label class="label has-text-grey-dark">Currency</label>
+        <label class="label has-text-grey-dark">Currency (Non-Standard / Standard)</label>
         <div class="control mb-3 has-text-info" onkeyup="validateSetTLInput()">
           <input class="input"  type="text" placeholder="4C494E5200000000000000000000000000000000 / LINR" required id="currency">
         </div>
@@ -93,9 +101,12 @@
     <div class="column is-three-fifths">
       <section class="section box has-background-white-ter">
         <div class="field">
-          <h1 class="title is-size-4 has-text-info">
+          <h1 class="title is-size-4 has-text-info mb-2">
             Token Aggregator
           </h1>
+          <h6 class="title is-size-6 has-text-info">
+            Send Non-XRP tokens from multiple addresses to single address
+          </h6>
           <div class="columns">
             <div class="column">
               <label class="label">Receiver Address</label>
@@ -106,13 +117,13 @@
               <div class="control mb-3" onkeyup="validateTokenAggregatorInput()">
                 <input class="input" type="text" placeholder="rBPtuMc4HBR1SuZyZv8hs7WBVxLBYrzxbY" required id="receiver-nonxrp-issuer">
               </div>
-              <label class="label">Currency</label>
+              <label class="label">Currency (Non-Standard / Standard)</label>
               <div class="control mb-3" onkeyup="validateTokenAggregatorInput()">
                 <input class="input" type="text" placeholder="4C494E5200000000000000000000000000000000 / LINR" required id="receiver-nonxrp-currency">
               </div>
               <label class="label">Amount</label>
               <div class="control mb-3" onkeyup="validateTokenAggregatorInput()">
-                <input class="input" type="text" placeholder="10" required id="receiver-nonxrp-amount">
+                <input class="input" type="text" placeholder="Type MAX if send all balance" required id="receiver-nonxrp-amount">
               </div>
               <div class="control">
                   <button class="button is-primary is-fullwidth has-text-weight-bold is-size-5 mt-6 is-focused set-tl-modal-trigger" id="aggregator-add-sender" data-target="set-tl-modal" disabled>Add Sender</button>
@@ -127,9 +138,12 @@
     <div class="column is-three-fifths">
       <section class="section box has-background-white-ter">
         <div class="field">
-          <h1 class="title is-size-4 has-text-info">
-            XRP Scatter
+          <h1 class="title is-size-4 has-text-info mb-2">
+            XRP Scatter I
           </h1>
+          <h6 class="title is-size-6 has-text-info">
+            An easy way to send XRP
+          </h6>
           <div class="columns">
             <div class="column">
               <label class="label">Sender Address</label>
@@ -138,10 +152,40 @@
               </div>
               <label class="label">Amount (XRP)</label>
               <div class="control mb-3" onkeyup="validateXRPScatterInput()">
-                <input class="input" type="text" placeholder="Enter amount in XRP" id="sender-xrp-amount">
+                <input class="input" type="number" min="0" placeholder="Enter amount" id="sender-xrp-amount">
               </div>
               <div class="control">
-                  <button class="button is-primary mt-6 is-fullwidth has-text-weight-bold is-size-5 is-focused set-tl-modal-trigger" id="sender-xrp-btn" data-target="set-tl-modal" disabled>Add Recipients</button>
+                  <button class="button is-primary mt-6 is-fullwidth has-text-weight-bold is-size-5 is-focused set-tl-modal-trigger" id="send-xrp-add-recipients" data-target="set-tl-modal" disabled>Add Recipients</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="columns is-centered">
+    <div class="column is-three-fifths">
+      <section class="section box has-background-white-ter">
+        <div class="field">
+          <h1 class="title is-size-4 has-text-info mb-2">
+            XRP Scatter II
+          </h1>
+          <h6 class="title is-size-6 has-text-info">
+            Send XRP to your addresses with less than 2 XRP plus FEE automatically 
+          </h6>
+          <div class="columns">
+            <div class="column">
+              <label class="label">Sender Address</label>
+              <div class="control mb-3" onkeyup="validateXRPScatterInput2()">
+                <input class="input" type="text" placeholder="rBPtuMc4HBR1SuZyZv8hs7WBVxLBYrzxbY" id="sender-xrp2">
+              </div>
+              <label class="label">Amount (XRP)</label>
+              <div class="control mb-3" onkeyup="validateXRPScatterInput2()">
+                <input class="input" type="number" min="0" placeholder="Enter amount" id="sender-xrp-amount2">
+              </div>
+              <div class="control">
+                  <button class="button is-primary mt-6 is-fullwidth has-text-weight-bold is-size-5 is-focused" id="send-xrp-btn2" disabled>Send</button>
               </div>
             </div>
           </div>
@@ -153,18 +197,19 @@
   <div class="footer">
     <div class="content has-text-centered">
       <p>
-        <strong>XAutomation</strong> by <a class="is-primary">soneng</a>. The source code is licensed
-        <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
-        is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+        <strong>XAutomation by soneng. </strong>
       </p>
       <div class="block mt-0">
-        <a href="https://xrpl.services/tokens" target="_blank">Xumm community tokens</a>
+        <p>Find tokens here ---> <span><a href="https://xrpl.services/tokens" target="_blank">Xumm community tokens</a></span> </p>
       </div>
       <div class="block mt-0">
-        <a href="https://xrpl.org/index.html" target="_blank">XRP Ledger Official Page</a>
+        <p>Read documentation here ---> <span><a href="https://xrpl.org/index.html" target="_blank">XRP Ledger Official Page</a></span></p>
       </div>
       <div class="block mt-0">
-        <a href="https://github.com/sisoneng" target="_blank">Follow me on Github =)</a>
+        <p>Follow me and rate my work here ---> <span><a href="https://github.com/sisoneng" target="_blank">Github</a></span></p>
+      </div>
+      <div class="block mt-6">
+        <strong>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae nisi ac dui pellentesque pulvinar. Aenean nibh turpis, semper a volutpat eget, mattis eu tortor."</strong>
       </div>
     </div>
   </div>
@@ -196,66 +241,9 @@
           <label class="checkbox">
           <div class="control is-size-6 mb-4">
             <input type="checkbox" class="accts" name="accts" value="rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz">
-            account1 rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
+            account2 rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
           </label>
           </div>
-
-          <label class="checkbox">
-          <div class="control is-size-6 mb-4">
-            <input type="checkbox" class="accts" name="accts" value="rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz">
-            account1 rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-          </label>
-          </div>
-
-          <label class="checkbox">
-          <div class="control is-size-6 mb-4">
-            <input type="checkbox" class="accts" name="accts" value="rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz">
-            account1 rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-          </label>
-          </div>
-
-          <label class="checkbox">
-          <div class="control is-size-6 mb-4">
-            <input type="checkbox" class="accts" name="accts" value="rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz">
-            account1 rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-          </label>
-          </div>
-
-          <label class="checkbox">
-          <div class="control is-size-6 mb-4">
-            <input type="checkbox" class="accts" name="accts" value="rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz">
-            account1 rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-          </label>
-          </div>
-
-          <label class="checkbox">
-          <div class="control is-size-6 mb-4">
-            <input type="checkbox" class="accts" name="accts" value="rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz">
-            account1 rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-          </label>
-          </div>
-
-          <label class="checkbox">
-          <div class="control is-size-6 mb-4">
-            <input type="checkbox" class="accts" name="accts" value="rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz">
-            account1 rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-          </label>
-          </div>
-
-          <label class="checkbox">
-          <div class="control is-size-6 mb-4">
-            <input type="checkbox" class="accts" name="accts" value="rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz">
-            account1 rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-          </label>
-          </div>
-
-          <label class="checkbox">
-          <div class="control is-size-6 mb-4">
-            <input type="checkbox" class="accts" name="accts" value="rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz">
-            account1 rsoLo2S1kiGeCcn6hCUXVrCpGMWLrRrLZz
-          </label>
-          </div>
-          
         </div>
       </section>
 
