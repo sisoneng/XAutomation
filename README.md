@@ -46,9 +46,9 @@ account2secret=111111 111111 111111 111111 111111 111111 111111 111111
 ##### HOW TO RUN XAutomation
 1. Open your command prompt
 2. Check first if your node.js is installed already using command `node -v` if your node.js is not yet installed download [node.js](https://nodejs.org/en/)
-3. Run command `nodemon server` in XAutomation folder. "Server started at port 3000" should appear.
-4. Open your browser. Type in URL the `http://localhost:3000/`
-5. Done.
+3. Run command npm install nodemon. Check if nodemon is now installed (nodemon --version)
+4. Run command `nodemon server` in XAutomation folder. "Server started at port 3000" should appear.
+5. Open your browser. Type in URL the `http://localhost:3000/`
 
 
 
